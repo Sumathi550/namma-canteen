@@ -1,0 +1,16 @@
+{
+  "name": "canteen-management-system",
+  "version": "1.0.0",
+  "description": "Namma Canteen Full-Stack Management System",
+  "scripts": {
+    "dev": "npm run dev --prefix smart-canteen",
+    "start": "npm run start --prefix smart-canteen",
+    "dev:backend": "npm run dev:backend --prefix smart-canteen",
+    "dev:canteen": "npm run dev:canteen --prefix smart-canteen",
+    "dev:staff": "npm run dev:staff --prefix smart-canteen",
+    "install:all": "npm run install:all --prefix smart-canteen",
+    "build:all": "npm run build:all --prefix smart-canteen",
+    "deploy:canteen": "npx wrangler pages deploy smart-canteen/frontend/dist --project-name namma-canteen-student",
+    "deploy:staff": "npx wrangler pages deploy smart-canteen/staff-portal/dist --project-name namma-canteen-staff"
+  }
+}

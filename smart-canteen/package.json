@@ -1,0 +1,20 @@
+{
+  "name": "smart-canteen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Canteen Management System - Dual Portals (Canteen + Staff)",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend && npm install --prefix staff-portal",
+    "dev": "concurrently -n \"BACKEND,CANTEEN,STAFF\" -c \"cyan,magenta,yellow\" \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\" \"npm run dev --prefix staff-portal\"",
+    "start": "concurrently -n \"BACKEND,CANTEEN,STAFF\" -c \"cyan,magenta,yellow\" \"npm run start --prefix backend\" \"npm run dev --prefix frontend\" \"npm run dev --prefix staff-portal\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:canteen": "npm run dev --prefix frontend",
+    "dev:staff": "npm run dev --prefix staff-portal",
+    "build:all": "npm run build --prefix frontend && npm run build --prefix staff-portal",
+    "deploy:canteen": "npx wrangler pages deploy frontend/dist --project-name namma-canteen-student",
+    "deploy:staff": "npx wrangler pages deploy staff-portal/dist --project-name namma-canteen-staff"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
