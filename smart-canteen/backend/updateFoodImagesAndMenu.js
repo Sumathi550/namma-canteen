@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Product = require("./models/Product");
+const Product = require("./models/product");
 
 // Curated list with distinct, authentic, high-quality South Indian & Tamil Nadu food photos
 const AUTHENTIC_CANTEEN_MENU = [

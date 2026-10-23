@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const Product = require("./models/Product");
+const Product = require("./models/product");
 const User = require("./models/User");
 const Order = require("./models/Order");
 

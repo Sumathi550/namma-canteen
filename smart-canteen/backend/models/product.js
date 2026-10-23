@@ -1,166 +1,87 @@
-const express = require("express");
-const router = express.Router();
+const mongoose = require("mongoose");
 
-const Product = require("../models/product");
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-// ===============================
-// GET ALL PRODUCTS
-// ===============================
-router.get("/", async (req, res) => {
-  try {
-    const products = await Product.find({
-      isArchived: false,
-    }).sort({ createdAt: -1 });
+    description: {
+      type: String,
+      default: "",
+      trim: true,
+    },
 
-    res.status(200).json(products);
-  } catch (error) {
-    console.error("Get products error:", error);
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
 
-    res.status(500).json({
-      message: "Failed to fetch products",
-      error: error.message,
-    });
+    category: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    image: {
+      type: String,
+      default: "",
+    },
+
+    imageUrl: {
+      type: String,
+      default: "",
+    },
+
+    available: {
+      type: Boolean,
+      default: true,
+    },
+
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
+
+    isVeg: {
+      type: Boolean,
+      default: true,
+    },
+
+    stock: {
+      type: Number,
+      default: 50,
+    },
+
+    isArchived: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
   }
+);
+
+// Synchronize available and isAvailable
+productSchema.pre("save", function (next) {
+  if (this.isModified("available")) {
+    this.isAvailable = this.available;
+  } else if (this.isModified("isAvailable")) {
+    this.available = this.isAvailable;
+  }
+
+  // Synchronize image and imageUrl
+  if (!this.imageUrl && this.image) {
+    this.imageUrl = this.image;
+  } else if (!this.image && this.imageUrl) {
+    this.image = this.imageUrl;
+  }
+
+  next();
 });
 
-// ===============================
-// GET PRODUCT BY ID
-// ===============================
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
-    }
-
-    res.status(200).json(product);
-  } catch (error) {
-    console.error("Get product error:", error);
-
-    res.status(500).json({
-      message: "Failed to fetch product",
-      error: error.message,
-    });
-  }
-});
-
-// ===============================
-// CREATE PRODUCT
-// ===============================
-router.post("/", async (req, res) => {
-  try {
-    const {
-      name,
-      description,
-      price,
-      category,
-      image,
-      imageUrl,
-      available,
-      isAvailable,
-      isVeg,
-      stock,
-    } = req.body;
-
-    if (!name || price === undefined || !category) {
-      return res.status(400).json({
-        message: "Name, price and category are required",
-      });
-    }
-
-    const product = new Product({
-      name,
-      description,
-      price,
-      category,
-      image,
-      imageUrl,
-      available:
-        available !== undefined ? available : true,
-      isAvailable:
-        isAvailable !== undefined ? isAvailable : true,
-      isVeg: isVeg !== undefined ? isVeg : true,
-      stock: stock !== undefined ? stock : 50,
-    });
-
-    const savedProduct = await product.save();
-
-    res.status(201).json({
-      message: "Product created successfully",
-      product: savedProduct,
-    });
-  } catch (error) {
-    console.error("Create product error:", error);
-
-    res.status(500).json({
-      message: "Failed to create product",
-      error: error.message,
-    });
-  }
-});
-
-// ===============================
-// UPDATE PRODUCT
-// ===============================
-router.put("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
-    }
-
-    Object.assign(product, req.body);
-
-    const updatedProduct = await product.save();
-
-    res.status(200).json({
-      message: "Product updated successfully",
-      product: updatedProduct,
-    });
-  } catch (error) {
-    console.error("Update product error:", error);
-
-    res.status(500).json({
-      message: "Failed to update product",
-      error: error.message,
-    });
-  }
-});
-
-// ===============================
-// DELETE PRODUCT
-// ===============================
-router.delete("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
-    }
-
-    // Soft delete
-    product.isArchived = true;
-    await product.save();
-
-    res.status(200).json({
-      message: "Product deleted successfully",
-    });
-  } catch (error) {
-    console.error("Delete product error:", error);
-
-    res.status(500).json({
-      message: "Failed to delete product",
-      error: error.message,
-    });
-  }
-});
-
-module.exports = router;
+module.exports = mongoose.model("Product", productSchema);

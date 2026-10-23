@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
-const Product = require("../models/Product");
+const Product = require("../models/product");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
 
 const router = express.Router();

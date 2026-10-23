@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const fs = require("fs");
-const Product = require("../models/Product");
+const Product = require("../models/product");
 const { authenticateToken, requireAdmin, optionalAuth } = require("../middleware/auth");
 const { upload, uploadDir, syncFileToPublicDirs } = require("../middleware/upload");
 
