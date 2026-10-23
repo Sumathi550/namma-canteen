@@ -126,7 +126,7 @@ export default function FoodCard({ food, cartQuantity = 0, onAdd, onUpdateQuanti
           onError={(e) => {
             const current = e.currentTarget.getAttribute("src") || "";
             if (current.startsWith("/images/") && !current.startsWith("http")) {
-              const backendUrl = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
+              const backendUrl = (import.meta.env.VITE_API_URL || "https://namma-canteen-x1mq.onrender.com/api").replace(/\/api\/?$/, "");
               e.currentTarget.src = `${backendUrl}${current}`;
             } else {
               e.currentTarget.src =
